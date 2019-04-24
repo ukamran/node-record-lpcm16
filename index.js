@@ -45,19 +45,18 @@ exports.start = function (options) {
       break
     case 'rec':
     default:
-      cmd = options.recordProgram
+      cmd = 'sox';
       cmdArgs = [
         '-q',                     // show no progress
-        '-r', options.sampleRate, // sample rate
-        '-c', options.channels,   // channels
+        '-t', 'waveaudio',        // input-type
+        '-d', // use default recording device
+        '-r', options.sampleRate.toString(),   // sample rate
+        '-c', '1',                // channels
         '-e', 'signed-integer',   // sample encoding
-        '-b', '16',               // precision (bits)
-        '-t', 'wav',              // audio type
-        '-',                      // pipe
-        // end on silence
-        'silence', '1', '0.1', options.thresholdStart || options.threshold + '%',
-        '1', options.silence, options.thresholdEnd || options.threshold + '%'
-      ]
+        '-b', '16',                     // precision (bits)
+        '-t', 'raw',              //output-type
+        '-'//pipe
+      ];
       break
     // On some systems (RasPi), arecord is the prefered recording binary
     case 'arecord':
